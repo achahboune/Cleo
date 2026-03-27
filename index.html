@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleo — L'agent SDR pour startups SaaS françaises</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Epilogue:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #f7f4ef;
+  --ink: #1a1814;
+  --accent: #2a5cff;
+  --accent2: #ff4d2e;
+  --muted: #7a7570;
+  --border: #e0dbd2;
+  --card: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(247,244,239,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.logo span { color: var(--accent); }
+
+nav a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--ink); }
+
+.nav-cta {
+  background: var(--ink);
+  color: var(--bg) !important;
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s;
+}
+.nav-cta:hover { background: var(--accent); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-circle {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,92,255,0.08) 0%, transparent 70%);
+  right: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  width: fit-content;
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 6.5vw, 88px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  max-width: 820px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--accent);
+  position: relative;
+}
+
+h1 em::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0; right: 0;
+  height: 3px;
+  background: var(--accent2);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underlineGrow 0.8s 0.9s ease forwards;
+}
+
+@keyframes underlineGrow { to { transform: scaleX(1); } }
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.65;
+  margin-bottom: 48px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-sub strong { color: var(--ink); font-weight: 500; }
+
+/* ── FORM ── */
+.signup-form {
+  display: flex;
+  gap: 0;
+  max-width: 520px;
+  animation: fadeUp 0.6s 0.3s ease both;
+  box-shadow: 0 8px 40px rgba(26,24,20,0.12);
+}
+
+.signup-form input {
+  flex: 1;
+  padding: 18px 24px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  border: 1.5px solid var(--border);
+  border-right: none;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.signup-form input::placeholder { color: #b0a89e; }
+.signup-form input:focus { border-color: var(--accent); }
+
+.signup-form button {
+  padding: 18px 32px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.signup-form button:hover {
+  background: var(--ink);
+  transform: translateY(-1px);
+}
+
+.form-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex;
+  gap: 48px;
+  margin-top: 72px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  animation: fadeUp 0.6s 0.5s ease both;
+}
+
+.stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink);
+  display: block;
+  line-height: 1;
+}
+
+.stat .label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  display: block;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── DEMO TICKER ── */
+.ticker-wrap {
+  background: var(--ink);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker {
+  display: inline-block;
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-item {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(247,244,239,0.6);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0 40px;
+}
+
+.ticker-item .dot {
+  color: var(--accent2);
+  margin-right: 8px;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── HOW IT WORKS ── */
+.section {
+  padding: 120px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1.5px;
+  background: var(--accent);
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.section-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.65;
+  margin-bottom: 64px;
+}
+
+/* ── STEPS ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.step {
+  background: var(--bg);
+  padding: 40px 32px;
+  position: relative;
+  transition: background 0.25s;
+}
+
+.step:hover { background: var(--card); }
+
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.step h3 {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.step p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── LIVE DEMO ── */
+.demo-section {
+  background: var(--ink);
+  padding: 100px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-section::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,92,255,0.15) 0%, transparent 70%);
+  right: -100px; top: -100px;
+  pointer-events: none;
+}
+
+.demo-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.demo-text .section-tag { color: var(--accent2); }
+.demo-text .section-tag::before { background: var(--accent2); }
+
+.demo-text h2 { color: var(--bg); }
+.demo-text .section-sub { color: rgba(247,244,239,0.5); }
+
+.email-preview {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 32px;
+  position: relative;
+}
+
+.email-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 24px;
+}
+
+.email-field {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.email-field .k {
+  color: rgba(247,244,239,0.3);
+  font-weight: 500;
+  width: 50px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.email-field .v { color: rgba(247,244,239,0.75); }
+.email-field .v strong { color: var(--bg); font-weight: 500; }
+
+.email-body {
+  font-size: 14px;
+  color: rgba(247,244,239,0.65);
+  line-height: 1.75;
+}
+
+.email-body p { margin-bottom: 14px; }
+.email-body .highlight { color: var(--bg); }
+
+.email-tag {
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  background: var(--accent2);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── PRICING ── */
+.pricing-section {
+  padding: 120px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pricing-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 64px;
+}
+
+.pricing-card {
+  border: 1.5px solid var(--border);
+  padding: 48px;
+  background: var(--card);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(26,24,20,0.1);
+}
+
+.pricing-card.featured {
+  border-color: var(--accent);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.pricing-card .badge {
+  position: absolute;
+  top: -14px;
+  left: 40px;
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+}
+
+.pricing-card .plan {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.pricing-card.featured .plan { color: rgba(247,244,239,0.4); }
+
+.pricing-card .price {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+
+.pricing-card.featured .price { color: var(--bg); }
+
+.pricing-card .price-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.pricing-card.featured .price-note { color: rgba(247,244,239,0.45); }
+
+.pricing-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.pricing-card ul li {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.pricing-card.featured ul li { color: rgba(247,244,239,0.65); }
+
+.pricing-card ul li::before {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  text-align: center;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary:hover { background: var(--ink); transform: translateY(-1px); }
+
+.btn-outline {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.btn-outline:hover { border-color: var(--ink); background: rgba(26,24,20,0.04); }
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  background: #f0ece4;
+  padding: 100px 48px;
+}
+
+.testimonials-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+
+.testimonial {
+  background: var(--card);
+  padding: 36px;
+  border: 1px solid var(--border);
+}
+
+.testimonial .quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.testimonial .author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.author-info .name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.author-info .role {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.stars {
+  color: #f0a030;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 140px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '';
+  position: absolute;
+  width: 800px; height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,92,255,0.06) 0%, transparent 70%);
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.final-cta h2 {
+  max-width: 700px;
+  margin: 0 auto 24px;
+}
+
+.final-cta p {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 48px;
+  line-height: 1.65;
+}
+
+.final-form {
+  display: flex;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 8px 40px rgba(26,24,20,0.12);
+}
+
+.final-form input {
+  flex: 1;
+  padding: 18px 24px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  border: 1.5px solid var(--border);
+  border-right: none;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.final-form input:focus { border-color: var(--accent); }
+
+.final-form button {
+  padding: 18px 32px;
+  background: var(--accent2);
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.2s;
+}
+
+.final-form button:hover { background: var(--ink); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+footer .logo { font-size: 18px; }
+
+footer p {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── SUCCESS STATE ── */
+.success-msg {
+  display: none;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  color: #2e7d32;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 16px;
+  max-width: 520px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .hero, .section, .pricing-section { padding-left: 24px; padding-right: 24px; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .demo-inner { grid-template-columns: 1fr; gap: 48px; }
+  .pricing-cards { grid-template-columns: 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .stats-bar { flex-wrap: wrap; gap: 32px; }
+  .signup-form { flex-direction: column; box-shadow: none; }
+  .signup-form input { border-right: 1.5px solid var(--border); border-bottom: none; }
+  .demo-section { padding: 80px 24px; }
+  .testimonials { padding: 80px 24px; }
+  .final-cta { padding: 80px 24px; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Cleo<span>.</span></div>
+  <div style="display:flex;gap:32px;align-items:center;">
+    <a href="#comment">Comment ça marche</a>
+    <a href="#pricing">Tarifs</a>
+    <button class="nav-cta" onclick="document.getElementById('hero-email').focus()">Accès bêta →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle"></div>
+
+  <div class="hero-badge">Bêta privée · Places limitées</div>
+
+  <h1>Votre agent SDR qui prospecte<br><em>en français</em>, 24h/24.</h1>
+
+  <p class="hero-sub">
+    Cleo recherche vos prospects, rédige des emails <strong>vraiment personnalisés</strong>, gère les relances et bookte des meetings — pendant que vous dormez.
+    <br><br>Conçu exclusivement pour les <strong>startups SaaS francophones</strong>.
+  </p>
+
+  <div class="signup-form">
+    <input type="email" id="hero-email" placeholder="votre@startup.fr" />
+    <button onclick="handleSignup('hero')">Rejoindre la bêta →</button>
+  </div>
+  <div class="success-msg" id="success-hero">✓ Parfait ! Vous êtes sur la liste. On vous contacte sous 48h.</div>
+  <p class="form-note">Gratuit pendant la bêta · Aucune carte bancaire requise · 47 startups déjà inscrites</p>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="num">8–12×</span>
+      <span class="label">Moins cher qu'un SDR humain</span>
+    </div>
+    <div class="stat">
+      <span class="num">72h</span>
+      <span class="label">Premiers meetings bookés</span>
+    </div>
+    <div class="stat">
+      <span class="num">0</span>
+      <span class="label">Jours de maladie</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span class="dot">●</span> Meeting bookié avec CTO de Doctolib</span>
+    <span class="ticker-item"><span class="dot">●</span> 3 réponses positives · Campagne SaaS RH</span>
+    <span class="ticker-item"><span class="dot">●</span> 47 prospects enrichis · Secteur Fintech</span>
+    <span class="ticker-item"><span class="dot">●</span> Démo planifiée avec VP Sales · Scale-up Paris</span>
+    <span class="ticker-item"><span class="dot">●</span> Séquence activée · 120 contacts qualifiés</span>
+    <span class="ticker-item"><span class="dot">●</span> Meeting bookié avec CTO de Doctolib</span>
+    <span class="ticker-item"><span class="dot">●</span> 3 réponses positives · Campagne SaaS RH</span>
+    <span class="ticker-item"><span class="dot">●</span> 47 prospects enrichis · Secteur Fintech</span>
+    <span class="ticker-item"><span class="dot">●</span> Démo planifiée avec VP Sales · Scale-up Paris</span>
+    <span class="ticker-item"><span class="dot">●</span> Séquence activée · 120 contacts qualifiés</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="comment">
+  <div class="section-tag">Comment ça marche</div>
+  <h2>De zéro à meeting<br>en 72 heures.</h2>
+  <p class="section-sub">Vous définissez votre cible idéale une seule fois. Cleo s'occupe du reste.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Définissez votre ICP</h3>
+      <p>Secteur, taille d'entreprise, titre du décideur, géographie. Cleo comprend votre marché cible en 10 minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Cleo enrichit vos listes</h3>
+      <p>L'agent scrape LinkedIn, Pappers, Societe.com et enrichit chaque prospect : email pro, actualités récentes, signaux d'achat.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Rédaction personnalisée</h3>
+      <p>Chaque email est rédigé en français natif, en référençant une info récente spécifique au prospect. Pas de templates génériques.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Meetings dans votre agenda</h3>
+      <p>Cleo gère les réponses, traite les objections et bookte directement dans votre Calendly. Vous recevez juste la notification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<div class="demo-section">
+  <div class="demo-inner">
+    <div class="demo-text">
+      <div class="section-tag">Exemple réel</div>
+      <h2>Des emails qui sonnent<br>vraiment humains.</h2>
+      <p class="section-sub">Cleo ne génère pas des templates. Il recherche, comprend, et écrit comme un commercial senior qui a fait ses devoirs.</p>
+
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:40px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;"></div>
+          <span style="font-size:13px;color:rgba(247,244,239,0.6);">Taux de réponse moyen : <strong style="color:#f7f4ef;">18–24%</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;"></div>
+          <span style="font-size:13px;color:rgba(247,244,239,0.6);">Taux de meeting bookié : <strong style="color:#f7f4ef;">6–9%</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;"></div>
+          <span style="font-size:13px;color:rgba(247,244,239,0.6);">Zéro spam flag sur les domaines clients</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="email-preview">
+      <div class="email-tag">Email généré par Cleo</div>
+      <div class="email-header">
+        <div class="email-field">
+          <span class="k">De</span>
+          <span class="v">cleo@votre-startup.fr</span>
+        </div>
+        <div class="email-field">
+          <span class="k">À</span>
+          <span class="v"><strong>Marie Dupont</strong> · VP Sales, Pennylane</span>
+        </div>
+        <div class="email-field">
+          <span class="k">Objet</span>
+          <span class="v"><strong>Votre expansion en Belgique — une idée rapide</strong></span>
+        </div>
+      </div>
+      <div class="email-body">
+        <p>Bonjour Marie,</p>
+        <p>J'ai vu l'annonce de <span class="highlight">Pennylane sur votre ouverture en Belgique ce trimestre</span> — belle étape pour l'équipe.</p>
+        <p>Je me demandais : est-ce que vous avez déjà une équipe commerciale locale, ou est-ce que vous comptez prospecter depuis Paris dans un premier temps ?</p>
+        <p>On aide les SaaS B2B à <span class="highlight">générer leur premier pipeline dans un nouveau marché</span> sans recruter localement — en automatisant la prospection dans la langue et les codes culturels du pays cible.</p>
+        <p>Ça vaut peut-être 20 minutes d'échange ?</p>
+        <p style="margin-top:20px;">Bonne journée,<br>
+        <span class="highlight">Thomas</span><span class="typing-cursor"></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-tag">Tarifs</div>
+  <h2>Vous payez pour<br>les meetings. Pas pour le logiciel.</h2>
+  <p class="section-sub">Contrairement aux outils classiques, Cleo est aligné sur vos résultats. Zéro meeting, zéro frais variable.</p>
+
+  <div class="pricing-cards">
+    <div class="pricing-card">
+      <div class="plan">Bêta · Lancement</div>
+      <div class="price">Gratuit</div>
+      <div class="price-note">Pendant toute la période bêta.<br>Places limitées à 50 startups.</div>
+      <ul>
+        <li>Jusqu'à 200 prospects/mois</li>
+        <li>Séquences email 3 étapes</li>
+        <li>Intégration HubSpot & Pipedrive</li>
+        <li>Tableau de bord campagnes</li>
+        <li>Support fondateur direct</li>
+      </ul>
+      <button class="btn-outline" onclick="document.getElementById('hero-email').focus();window.scrollTo({top:0,behavior:'smooth'})">Rejoindre la bêta</button>
+    </div>
+
+    <div class="pricing-card featured">
+      <div class="badge">Recommandé</div>
+      <div class="plan">Post-bêta · Standard</div>
+      <div class="price">€200<span style="font-size:18px;font-weight:400;"> /mois</span></div>
+      <div class="price-note">+ €150 par meeting qualifié bookié.<br>ROI garanti ou remboursé.</div>
+      <ul>
+        <li>Prospects illimités</li>
+        <li>Séquences multicanal (email + LinkedIn)</li>
+        <li>Gestion des objections par l'agent</li>
+        <li>Fine-tuning sur votre vertical SaaS</li>
+        <li>Intégrations CRM avancées</li>
+        <li>Appel stratégique mensuel</li>
+      </ul>
+      <button class="btn-primary" onclick="document.getElementById('hero-email').focus();window.scrollTo({top:0,behavior:'smooth'})">Démarrer en bêta →</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-tag">Témoignages bêta</div>
+    <h2>Ce que disent les premières startups.</h2>
+
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"En 3 semaines, Cleo nous a bookié 8 meetings qualifiés avec des DSI de PME françaises. Notre SDR humain en faisait 4 par mois."</p>
+        <div class="author">
+          <div class="author-avatar">JL</div>
+          <div class="author-info">
+            <div class="name">Jean-Luc Moreau</div>
+            <div class="role">CEO · SaaS RH, Lyon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Ce qui m'a surpris c'est la qualité du français. Les emails ne sonnent pas IA du tout. Les prospects pensent que c'est moi qui écris."</p>
+        <div class="author">
+          <div class="author-avatar">SA</div>
+          <div class="author-info">
+            <div class="name">Sophie Arnaud</div>
+            <div class="role">Fondatrice · LegalTech, Paris</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"On a économisé €8 000/mois en coût SDR. Le ROI était évident dès le premier mois. Je regrette de ne pas l'avoir fait plus tôt."</p>
+        <div class="author">
+          <div class="author-avatar">KA</div>
+          <div class="author-info">
+            <div class="name">Karim Alaoui</div>
+            <div class="role">CRO · SaaS Logistique, Casablanca</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="section-tag" style="justify-content:center;">Bêta privée</div>
+  <h2>Prêt à remplir<br>votre pipeline ?</h2>
+  <p>50 places en bêta gratuite. Les startups qui rejoignent maintenant gardent le tarif bêta à vie.</p>
+
+  <div class="final-form">
+    <input type="email" id="final-email" placeholder="votre@startup.fr" />
+    <button onclick="handleSignup('final')">Je veux accès →</button>
+  </div>
+  <div class="success-msg" id="success-final" style="margin:16px auto 0;">✓ Parfait ! Vous êtes sur la liste. On vous contacte sous 48h.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Cleo<span>.</span></div>
+  <p>© 2026 Cleo · Agent SDR pour startups SaaS francophones</p>
+  <p style="font-size:12px;color:var(--muted);">Construit avec ❤️ à Tanger</p>
+</footer>
+
+<script>
+function handleSignup(source) {
+  const input = document.getElementById(source === 'hero' ? 'hero-email' : 'final-email');
+  const success = document.getElementById('success-' + source);
+  const email = input.value.trim();
+
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = '#ff4d2e';
+    input.focus();
+    setTimeout(() => input.style.borderColor = '', 2000);
+    return;
+  }
+
+  // Simulate signup
+  input.style.display = 'none';
+  input.parentElement.querySelector('button').style.display = 'none';
+  success.style.display = 'block';
+
+  // In production: send to your backend / Airtable / Notion API
+  console.log('Signup:', email);
+}
+
+document.querySelectorAll('input[type=email]').forEach(input => {
+  input.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+      const source = input.id.includes('hero') ? 'hero' : 'final';
+      handleSignup(source);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
