@@ -790,7 +790,22 @@ footer p {
   color: var(--muted);
 }
 
-/* ── SUCCESS STATE ── */
+.cta-btn {
+  display: inline-block;
+  padding: 18px 40px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 8px 40px rgba(42,92,255,0.3);
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.cta-btn:hover { background: var(--ink); transform: translateY(-2px); }
+
 .success-msg {
   display: none;
   background: #e8f5e9;
@@ -829,7 +844,7 @@ footer p {
   <div style="display:flex;gap:32px;align-items:center;">
     <a href="#comment">Comment ça marche</a>
     <a href="#pricing">Tarifs</a>
-    <button class="nav-cta" onclick="document.getElementById('hero-email').focus()">Accès bêta →</button>
+    <a href="https://tally.so/r/b5LGPg" target="_blank" class="nav-cta">Accès bêta →</a>
   </div>
 </nav>
 
@@ -846,11 +861,7 @@ footer p {
     <br><br>Conçu exclusivement pour les <strong>startups SaaS francophones</strong>.
   </p>
 
-  <div class="signup-form">
-    <input type="email" id="hero-email" placeholder="votre@startup.fr" />
-    <button onclick="handleSignup('hero')">Rejoindre la bêta →</button>
-  </div>
-  <div class="success-msg" id="success-hero">✓ Parfait ! Vous êtes sur la liste. On vous contacte sous 48h.</div>
+  <a href="https://tally.so/r/b5LGPg" target="_blank" class="cta-btn">Rejoindre la bêta gratuite →</a>
   <p class="form-note">Gratuit pendant la bêta · Aucune carte bancaire requise · 47 startups déjà inscrites</p>
 
   <div class="stats-bar">
@@ -944,7 +955,7 @@ footer p {
       <div class="email-header">
         <div class="email-field">
           <span class="k">De</span>
-          <span class="v">cleo@votre-startup.fr</span>
+          <span class="v"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d0e0108022d1b02191f08401e190c1f19181d430b1f">[email&#160;protected]</a></span>
         </div>
         <div class="email-field">
           <span class="k">À</span>
@@ -986,7 +997,7 @@ footer p {
         <li>Tableau de bord campagnes</li>
         <li>Support fondateur direct</li>
       </ul>
-      <button class="btn-outline" onclick="document.getElementById('hero-email').focus();window.scrollTo({top:0,behavior:'smooth'})">Rejoindre la bêta</button>
+      <a href="https://tally.so/r/b5LGPg" target="_blank" class="btn-outline" style="display:block;text-align:center;text-decoration:none;">Rejoindre la bêta</a>
     </div>
 
     <div class="pricing-card featured">
@@ -1002,7 +1013,7 @@ footer p {
         <li>Intégrations CRM avancées</li>
         <li>Appel stratégique mensuel</li>
       </ul>
-      <button class="btn-primary" onclick="document.getElementById('hero-email').focus();window.scrollTo({top:0,behavior:'smooth'})">Démarrer en bêta →</button>
+      <a href="https://tally.so/r/b5LGPg" target="_blank" class="btn-primary" style="display:block;text-align:center;text-decoration:none;">Démarrer en bêta →</a>
     </div>
   </div>
 </section>
@@ -1059,11 +1070,7 @@ footer p {
   <h2>Prêt à remplir<br>votre pipeline ?</h2>
   <p>50 places en bêta gratuite. Les startups qui rejoignent maintenant gardent le tarif bêta à vie.</p>
 
-  <div class="final-form">
-    <input type="email" id="final-email" placeholder="votre@startup.fr" />
-    <button onclick="handleSignup('final')">Je veux accès →</button>
-  </div>
-  <div class="success-msg" id="success-final" style="margin:16px auto 0;">✓ Parfait ! Vous êtes sur la liste. On vous contacte sous 48h.</div>
+  <a href="https://tally.so/r/b5LGPg" target="_blank" class="cta-btn">Je veux accès →</a>
 </section>
 
 <!-- FOOTER -->
@@ -1073,7 +1080,7 @@ footer p {
   <p style="font-size:12px;color:var(--muted);">Construit avec ❤️ à Tanger</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function handleSignup(source) {
   const input = document.getElementById(source === 'hero' ? 'hero-email' : 'final-email');
   const success = document.getElementById('success-' + source);
@@ -1095,15 +1102,4 @@ function handleSignup(source) {
   console.log('Signup:', email);
 }
 
-document.querySelectorAll('input[type=email]').forEach(input => {
-  input.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-      const source = input.id.includes('hero') ? 'hero' : 'final';
-      handleSignup(source);
-    }
-  });
-});
-</script>
-
-</body>
-</html>
+document.querySelectorAll('input[type=email]'
